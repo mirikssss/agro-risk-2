@@ -1,0 +1,10 @@
+{
+  "name": "agro-risk",
+  "private": true,
+  "description": "AgroRisk — Satellite AI Risk Engine landing",
+  "scripts": {
+    "dev": "npm run dev --prefix silta-main",
+    "build": "npm run build --prefix silta-main",
+    "postinstall": "npm install --prefix silta-main"
+  }
+}

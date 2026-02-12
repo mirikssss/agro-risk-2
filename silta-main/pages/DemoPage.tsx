@@ -1,0 +1,64 @@
+import { content } from '../landingContent'
+import AnimateIn from '../components/AnimateIn'
+import SectionHeading from '../components/SectionHeading'
+import Button from '../components/Button'
+import { EditorialSection } from '../components/editorial'
+
+export default function DemoPage() {
+  const d = content.demo
+  return (
+    <div className="bg-[var(--color-bg)] satellite-grid">
+      <EditorialSection>
+        <AnimateIn from="top" duration={800}>
+          <SectionHeading title={d.title} subtitle={d.sub} />
+        </AnimateIn>
+
+        {/* Interactive mock: one frame */}
+        <AnimateIn from="bottom" delay={200} duration={800}>
+          <div className="relative rounded-xl border border-[var(--color-line)] overflow-hidden bg-[var(--color-surface)] shadow-[0_2px_20px_rgba(20,20,20,0.06)] satellite-grid">
+            <div className="flex items-center gap-2 py-3 px-5 border-b border-[var(--color-line)] bg-[var(--color-surfaceAlt)]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-muted)]/60" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-muted)]/40" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-muted)]/30" />
+              <span className="text-[12px] text-[var(--color-muted)] ml-3">dashboard.agrorisk.io</span>
+              <span className="ml-auto text-[10px] font-mono text-accent/80 tracking-wider">Live · NDVI</span>
+            </div>
+            <div className="p-5 grid grid-cols-3 gap-3">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-16 rounded-lg bg-[var(--color-surfaceAlt)] border border-[var(--color-line)]" />
+              ))}
+            </div>
+            <div className="mx-5 mb-5 h-44 rounded-xl bg-[var(--color-surfaceAlt)] border border-[var(--color-line)] flex items-center justify-center">
+              <span className="text-[14px] text-[var(--color-muted)]">Satellite field view (mock)</span>
+            </div>
+          </div>
+        </AnimateIn>
+
+        {/* What you'll see — 3 bullets */}
+        <AnimateIn from="bottom" delay={320} duration={800}>
+          <p className="mt-6 text-[12px] font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-3">
+            What you&apos;ll see
+          </p>
+          <ul className="space-y-2 text-[15px] text-[var(--color-text)]">
+            {d.features.slice(0, 3).map((f, i) => (
+              <li key={i} className="flex gap-2">
+                <span className="text-accent shrink-0">•</span>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </AnimateIn>
+
+        <AnimateIn from="fade" delay={450} duration={800}>
+          <div className="flex flex-wrap gap-3 mt-8">
+            <Button to="/demo" variant="outline">{d.ctaDashboard}</Button>
+            <Button to="/demo" variant="primary">{d.ctaLive}</Button>
+          </div>
+          <p className="mt-4 text-[13px] text-[var(--color-muted)]">
+            This is a UI mock. Request a live demo for real satellite data.
+          </p>
+        </AnimateIn>
+      </EditorialSection>
+    </div>
+  )
+}
