@@ -10,7 +10,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 }
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash-lite';
 const MAX_HISTORY_TURNS = 10;
 
 export async function handleChat(req: Request, res: Response): Promise<void> {
