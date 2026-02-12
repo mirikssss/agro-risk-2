@@ -1,4 +1,10 @@
 import type { Request, Response } from 'express';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+/** Vercel serverless entry: deploy to Vercel → /api/ai/tts works without a separate server */
+export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
+  await handleTts(req as unknown as Request, res as unknown as Response);
+}
 
 const DEEPGRAM_API_KEY = process.env.DEEPGRAM_API_KEY;
 const DEEPGRAM_MODEL = process.env.DEEPGRAM_MODEL || 'aura-2-thalia-en';

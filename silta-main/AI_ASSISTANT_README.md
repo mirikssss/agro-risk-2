@@ -30,6 +30,18 @@ Set these for the **Node API server** (e.g. in `.env` in project root, or in you
 
 Without `GEMINI_API_KEY`, `/api/ai/chat` returns 500. Without `DEEPGRAM_API_KEY`, `/api/ai/tts` returns 500. The UI still loads; chat/voice will show an error if keys are missing.
 
+## Deploy on Vercel (chat + TTS without a separate server)
+
+The same `api/ai/chat.ts` and `api/ai/tts.ts` work as **Vercel Serverless Functions**. After deploy, `/api/ai/chat` and `/api/ai/tts` are served by Vercel; no Node server on port 3001 is needed.
+
+1. Deploy the project to Vercel. If the repo root is the parent of `silta-main`, set **Root Directory** to `silta-main` in the Vercel project settings so that `api/` and the frontend build are found.
+2. In the Vercel project: **Settings → Environment Variables** add:
+   - `GEMINI_API_KEY` — Google AI Studio API key
+   - `DEEPGRAM_API_KEY` — Deepgram API key (TTS)
+3. Redeploy once after saving the variables (or enable “Redeploy when env changes”).
+
+The frontend calls `/api/ai/chat` and `/api/ai/tts` on the same origin, so no proxy or CORS changes are needed.
+
 ## API routes
 
 - **POST `/api/ai/chat`**  

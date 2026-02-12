@@ -1,7 +1,13 @@
 import type { Request, Response } from 'express';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenAI } from '@google/genai';
 import { FACTS } from '../../lib/agroRiskFacts.js';
 import { AGRO_RISK_SYSTEM_PROMPT } from './systemPrompt.js';
+
+/** Vercel serverless entry: deploy to Vercel → /api/ai/chat works without a separate server */
+export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
+  await handleChat(req as unknown as Request, res as unknown as Response);
+}
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
