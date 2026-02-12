@@ -24,12 +24,36 @@ export default function DemoPage() {
               <span className="ml-auto text-[10px] font-mono text-accent/80 tracking-wider">Live · NDVI</span>
             </div>
             <div className="p-5 grid grid-cols-3 gap-3">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-16 rounded-lg bg-[var(--color-surfaceAlt)] border border-[var(--color-line)]" />
+              {[
+                { title: 'Yield forecast', value: '2.7 t/ha', sub: 'p50 anomaly +9.0%' },
+                { title: 'Yield anomaly', value: '+9.0%', sub: 'vs 5‑yr average' },
+                { title: 'Field risk', value: 'Low', sub: 'Satellite-based' },
+                { title: 'Trend dynamics', value: 'Improving', sub: 'NDVI slope +0.008' },
+                { title: 'Climatic stress', value: 'HTC 0.75', sub: 'Normal' },
+                { title: 'Confidence', value: '±3.1%', sub: 'Anomaly range 6.3–9.4%' },
+              ].map((card, i) => (
+                <div key={i} className="rounded-lg bg-[var(--color-surfaceAlt)] border border-[var(--color-line)] p-3 flex flex-col justify-between min-h-[72px]">
+                  <p className="text-[10px] font-semibold text-[var(--color-muted)] uppercase tracking-wider">
+                    {card.title}
+                  </p>
+                  <p className="text-[15px] font-semibold text-[var(--color-text)] leading-tight mt-0.5">
+                    {card.value}
+                  </p>
+                  <p className="text-[11px] text-[var(--color-muted)] mt-1">
+                    {card.sub}
+                  </p>
+                </div>
               ))}
             </div>
-            <div className="mx-5 mb-5 h-44 rounded-xl bg-[var(--color-surfaceAlt)] border border-[var(--color-line)] flex items-center justify-center">
-              <span className="text-[14px] text-[var(--color-muted)]">Satellite field view (mock)</span>
+            <div className="mx-5 mb-5 rounded-xl overflow-hidden border border-[var(--color-line)] bg-black aspect-video">
+              <iframe
+                src="https://www.youtube.com/embed/7GL3GYlno1o"
+                title="AgroRisk - платформа для прогноза урожайности для агрокредитования"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                className="w-full h-full"
+              />
             </div>
           </div>
         </AnimateIn>
