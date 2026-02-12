@@ -1,14 +1,11 @@
-import { useState } from 'react'
 import { content } from '../landingContent'
 import AnimateIn from '../components/AnimateIn'
 import SectionHeading from '../components/SectionHeading'
 import Button from '../components/Button'
 import { EditorialSection } from '../components/editorial'
-import InvestorAssistant from '../components/InvestorAssistant'
-
 export default function DemoPage() {
   const d = content.demo
-  const [assistantOpen, setAssistantOpen] = useState(false)
+  const openAssistant = () => window.dispatchEvent(new CustomEvent('open-agrorisk-assistant'))
   return (
     <div className="bg-[var(--color-bg)] satellite-grid">
       <EditorialSection>
@@ -58,7 +55,7 @@ export default function DemoPage() {
             <Button to="/demo" variant="primary">{d.ctaLive}</Button>
             <button
               type="button"
-              onClick={() => setAssistantOpen(true)}
+              onClick={openAssistant}
               className="px-5 py-2.5 rounded-xl font-semibold text-[14px] border-2 border-[var(--color-accent)] text-[var(--color-accent)] bg-transparent hover:bg-[var(--color-accent)]/10 transition-colors"
             >
               Ask AgroRisk AI
@@ -69,20 +66,6 @@ export default function DemoPage() {
           </p>
         </AnimateIn>
       </EditorialSection>
-
-      {/* Floating AI assistant button */}
-      <button
-        type="button"
-        onClick={() => setAssistantOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full shadow-lg border-2 border-[var(--color-accent)] bg-[var(--color-surface)] text-[var(--color-accent)] flex items-center justify-center hover:bg-[var(--color-accent)]/10 transition-colors"
-        aria-label="Ask AgroRisk AI"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-      </button>
-
-      <InvestorAssistant open={assistantOpen} onClose={() => setAssistantOpen(false)} />
     </div>
   )
 }

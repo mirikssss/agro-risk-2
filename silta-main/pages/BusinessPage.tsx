@@ -88,15 +88,16 @@ export default function BusinessPage() {
   const [tab, setTab] = useState<OfferingTab>('banks')
   const offering = OFFERINGS[tab]
 
+  const sectionClass = 'pb-8 md:pb-10'
   return (
     <div className="bg-[var(--color-bg)] satellite-grid">
       {/* Hero */}
-      <EditorialSection>
+      <EditorialSection className={`pt-10 md:pt-14 ${sectionClass}`}>
         <AnimateIn from="top" duration={800}>
           <h1 className="font-serif text-[var(--color-text)] text-[clamp(32px,5vw,52px)] font-semibold leading-[1.12] tracking-[-0.02em] max-w-3xl mb-4">
             A pricing model banks can actually pilot.
           </h1>
-          <p className="text-[18px] md:text-[20px] text-[var(--color-muted)] leading-[1.55] max-w-2xl mb-8">
+          <p className="text-[18px] md:text-[20px] text-[var(--color-muted)] leading-[1.55] max-w-2xl mb-6">
             Start small, prove lift, then integrate and scale across the portfolio.
           </p>
           <div className="flex flex-wrap gap-3">
@@ -117,12 +118,12 @@ export default function BusinessPage() {
       </EditorialSection>
 
       {/* Offerings: tabs + content */}
-      <EditorialSection className="pt-0">
+      <EditorialSection className={`pt-6 md:pt-8 ${sectionClass}`}>
         <AnimateIn from="bottom" delay={100} duration={800}>
-          <p className="text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-4">
+          <p className="text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-3">
             Offerings
           </p>
-          <div className="flex flex-wrap gap-1 p-1 rounded-xl border border-[var(--color-line)] bg-[var(--color-surfaceAlt)] w-fit mb-10">
+          <div className="flex flex-wrap gap-1 p-1 rounded-xl border border-[var(--color-line)] bg-[var(--color-surfaceAlt)] w-fit mb-6">
             {(['banks', 'insurers', 'dfis'] as const).map((t) => (
               <button
                 key={t}
@@ -140,7 +141,7 @@ export default function BusinessPage() {
           </div>
 
           <div
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8"
             style={{ minHeight: 200 }}
           >
             <div key={tab} className="lg:col-span-7 space-y-6 animate-tab-content-in">
@@ -177,9 +178,9 @@ export default function BusinessPage() {
       </EditorialSection>
 
       {/* Pricing cards */}
-      <EditorialSection className="pt-0">
+      <EditorialSection className={`pt-6 md:pt-8 ${sectionClass}`}>
         <AnimateIn from="bottom" delay={150} duration={800}>
-          <p className="text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-6">
+          <p className="text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-4">
             Pricing
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -255,9 +256,9 @@ export default function BusinessPage() {
       </EditorialSection>
 
       {/* Pilot → Integration → Scale timeline */}
-      <EditorialSection className="pt-0">
+      <EditorialSection className={`pt-6 md:pt-8 ${sectionClass}`}>
         <AnimateIn from="bottom" delay={200} duration={800}>
-          <p className="text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-6">
+          <p className="text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-4">
             Pilot → Integration → Scale
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -304,10 +305,10 @@ export default function BusinessPage() {
       </EditorialSection>
 
       {/* ROI strip */}
-      <EditorialSection className="pt-0">
+      <EditorialSection className={`pt-6 md:pt-8 ${sectionClass}`}>
         <AnimateIn from="bottom" delay={250} duration={800}>
-          <div className="rounded-2xl border border-[var(--color-after-border)] bg-[var(--color-after)] p-8 md:p-10">
-            <p className="text-[11px] font-semibold text-[var(--color-accent)] uppercase tracking-wider mb-6">
+          <div className="rounded-2xl border border-[var(--color-after-border)] bg-[var(--color-after)] p-6 md:p-8">
+            <p className="text-[11px] font-semibold text-[var(--color-accent)] uppercase tracking-wider mb-4">
               Why it pays off
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -332,18 +333,18 @@ export default function BusinessPage() {
       </EditorialSection>
 
       {/* CTA */}
-      <EditorialSection className="pt-0">
+      <EditorialSection className={`pt-6 md:pt-8 ${sectionClass}`}>
         <AnimateIn from="bottom" delay={300} duration={800}>
-          <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-8 md:p-10 text-center max-w-2xl mx-auto">
+          <div className="rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface)] p-6 md:p-8 text-center max-w-2xl mx-auto">
             <h2 className="font-serif text-[28px] md:text-[32px] font-semibold text-[var(--color-text)] mb-3">
               Ready to pilot?
             </h2>
-            <p className="text-[15px] text-[var(--color-muted)] mb-6">
+            <p className="text-[15px] text-[var(--color-muted)] mb-5">
               We'll scope a pilot in 30 minutes.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <Button to="/demo" variant="primary">
-                Request a Pilot
+              <Button href="https://agro-risk.vercel.app" variant="primary">
+                Попробовать пилот
               </Button>
               <TransitionLink
                 to="/demo"

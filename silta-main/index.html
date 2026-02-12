@@ -6,7 +6,7 @@
     <title>AgroRisk — Satellite AI Risk Engine for Banks & Insurers</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -51,7 +51,9 @@
         --color-tech: #2D7A6E;
         --font-serif: 'Instrument Serif', 'Playfair Display', Georgia, serif;
         --font-sans: 'Manrope', 'Inter', system-ui, sans-serif;
+        --font-logo: 'Plus Jakarta Sans', 'Manrope', system-ui, sans-serif;
       }
+      .font-logo { font-family: var(--font-logo); font-weight: 600; }
       html { scroll-behavior: smooth; }
       body {
         font-family: var(--font-sans);

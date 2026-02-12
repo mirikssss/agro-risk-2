@@ -48,10 +48,17 @@ export default function Navbar() {
               className="flex items-center gap-2.5 no-underline text-[var(--color-text)]"
             >
               <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                 style={{ background: 'var(--color-accent)' }}
-              />
-              <span className="font-semibold text-[17px] tracking-tight font-sans">
+                aria-hidden
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                  <path d="M12 2v20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M5 7h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M12 22c-3 0-6-2.5-8-6M12 22c3 0 6-2.5 8-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+                </svg>
+              </div>
+              <span className="font-logo text-[17px] tracking-tight text-[var(--color-text)]">
                 {content.nav.logo}
               </span>
             </TransitionLink>
