@@ -1,3 +1,7 @@
+/** Vercel serverless entry: deploy to Vercel → /api/ai/tts works without a separate server */
+export default async function handler(req, res) {
+    await handleTts(req, res);
+}
 const DEEPGRAM_API_KEY = process.env.DEEPGRAM_API_KEY;
 const DEEPGRAM_MODEL = process.env.DEEPGRAM_MODEL || 'aura-2-thalia-en';
 const DEEPGRAM_ENCODING = process.env.DEEPGRAM_TTS_ENCODING || 'mp3';

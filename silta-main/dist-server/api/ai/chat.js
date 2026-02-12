@@ -1,6 +1,10 @@
 import { GoogleGenAI } from '@google/genai';
 import { FACTS } from '../../lib/agroRiskFacts.js';
 import { AGRO_RISK_SYSTEM_PROMPT } from './systemPrompt.js';
+/** Vercel serverless entry: deploy to Vercel → /api/ai/chat works without a separate server */
+export default async function handler(req, res) {
+    await handleChat(req, res);
+}
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const MAX_HISTORY_TURNS = 10;
@@ -25,45 +29,48 @@ export async function handleChat(req, res) {
     const systemBlock = AGRO_RISK_SYSTEM_PROMPT +
         '\n\n---\nFACTS (your only source of truth; never invent data not present here):\n' +
         JSON.stringify(FACTS, null, 0);
-    const history = messages.slice(-MAX_HISTORY_TURNS * 2).map((m) => ({
+    const history = messages
+        .slice(-MAX_HISTORY_TURNS * 2)
+        .filter((m) => (m.role === 'model' ? String(m.parts ?? '').trim() : true))
+        .map((m) => ({
         role: m.role === 'model' ? 'model' : 'user',
-        parts: [{ text: m.parts }],
+        parts: [{ text: String(m.parts ?? '').trim() }],
     }));
     try {
+        const result = await ai.models.generateContent({
+            model: GEMINI_MODEL,
+            contents: history,
+            config: {
+                systemInstruction: systemBlock,
+                temperature: 0.4,
+            },
+        });
+        let text = result?.text;
+        if (text === undefined && result && typeof result.text === 'string') {
+            text = result.text;
+        }
+        if (text === undefined && result?.candidates?.[0]?.content?.parts) {
+            text = result.candidates[0].content.parts
+                .map((p) => (p && typeof p.text === 'string' ? p.text : ''))
+                .join('');
+        }
+        const fullText = typeof text === 'string' ? text.trim() : '';
         if (wantStream) {
             res.setHeader('Content-Type', 'text/event-stream');
             res.setHeader('Cache-Control', 'no-cache');
             res.setHeader('Connection', 'keep-alive');
             res.flushHeaders?.();
-            const stream = await ai.models.generateContentStream({
-                model: GEMINI_MODEL,
-                contents: history,
-                config: {
-                    systemInstruction: systemBlock,
-                    temperature: 0.4,
-                },
-            });
-            for await (const chunk of stream) {
-                const text = chunk.text;
-                if (text) {
-                    res.write(`data: ${JSON.stringify({ delta: text })}\n\n`);
-                    res.flush?.();
-                }
+            if (fullText) {
+                res.write(`data: ${JSON.stringify({ delta: fullText })}\n\n`);
+            }
+            else {
+                res.write(`data: ${JSON.stringify({ delta: 'I couldn\'t generate a response. Please try again or rephrase your question.' })}\n\n`);
             }
             res.write('data: [DONE]\n\n');
             res.end();
         }
         else {
-            const result = await ai.models.generateContent({
-                model: GEMINI_MODEL,
-                contents: history,
-                config: {
-                    systemInstruction: systemBlock,
-                    temperature: 0.4,
-                },
-            });
-            const text = result.text ?? '';
-            res.status(200).json({ text, message: text });
+            res.status(200).json({ text: fullText || '', message: fullText || '' });
         }
     }
     catch (err) {

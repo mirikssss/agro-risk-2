@@ -51,64 +51,40 @@ export async function handleChat(req: Request, res: Response): Promise<void> {
     }));
 
   try {
+    const result = await ai.models.generateContent({
+      model: GEMINI_MODEL,
+      contents: history,
+      config: {
+        systemInstruction: systemBlock,
+        temperature: 0.4,
+      },
+    });
+
+    let text = result?.text;
+    if (text === undefined && result && typeof (result as { text?: string }).text === 'string') {
+      text = (result as { text: string }).text;
+    }
+    if (text === undefined && result?.candidates?.[0]?.content?.parts) {
+      text = result.candidates[0].content.parts
+        .map((p: { text?: string }) => (p && typeof p.text === 'string' ? p.text : ''))
+        .join('');
+    }
+    const fullText = typeof text === 'string' ? text.trim() : '';
+
     if (wantStream) {
       res.setHeader('Content-Type', 'text/event-stream');
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Connection', 'keep-alive');
-      res.setHeader('X-Accel-Buffering', 'no');
       res.flushHeaders?.();
-      res.write(': keep-alive\n\n');
-      (res as unknown as { flush?: () => void }).flush?.();
-
-      const stream = await ai.models.generateContentStream({
-        model: GEMINI_MODEL,
-        contents: history,
-        config: {
-          systemInstruction: systemBlock,
-          temperature: 0.4,
-        },
-      });
-
-      let wroteAny = false;
-      for await (const chunk of stream) {
-        const text = chunk?.text ?? (chunk as { text?: string }).text;
-        if (typeof text === 'string' && text.length > 0) {
-          res.write(`data: ${JSON.stringify({ delta: text })}\n\n`);
-          (res as unknown as { flush?: () => void }).flush?.();
-          wroteAny = true;
-        }
-      }
-
-      if (!wroteAny) {
-        const fallback = await ai.models.generateContent({
-          model: GEMINI_MODEL,
-          contents: history,
-          config: {
-            systemInstruction: systemBlock,
-            temperature: 0.4,
-          },
-        });
-        const fullText = fallback?.text ?? (fallback as { text?: string })?.text ?? '';
-        if (fullText.trim()) {
-          res.write(`data: ${JSON.stringify({ delta: fullText })}\n\n`);
-          (res as unknown as { flush?: () => void }).flush?.();
-        } else {
-          res.write(`data: ${JSON.stringify({ delta: 'I couldn\'t generate a response for this request. Please try again or rephrase your question.' })}\n\n`);
-        }
+      if (fullText) {
+        res.write(`data: ${JSON.stringify({ delta: fullText })}\n\n`);
+      } else {
+        res.write(`data: ${JSON.stringify({ delta: 'I couldn\'t generate a response. Please try again or rephrase your question.' })}\n\n`);
       }
       res.write('data: [DONE]\n\n');
       res.end();
     } else {
-      const result = await ai.models.generateContent({
-        model: GEMINI_MODEL,
-        contents: history,
-        config: {
-          systemInstruction: systemBlock,
-          temperature: 0.4,
-        },
-      });
-      const text = result.text ?? '';
-      res.status(200).json({ text, message: text });
+      res.status(200).json({ text: fullText || '', message: fullText || '' });
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';

@@ -125,14 +125,16 @@ export default function InvestorAssistant({
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let full = '';
+        let buffer = '';
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n');
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() ?? '';
           for (const line of lines) {
             if (line.startsWith('data: ')) {
-              const data = line.slice(6);
+              const data = line.slice(6).trim();
               if (data === '[DONE]') continue;
               try {
                 const parsed = JSON.parse(data) as { delta?: string };
@@ -141,8 +143,19 @@ export default function InvestorAssistant({
                   setStreamingText(full);
                 }
               } catch {
-                /* ignore */
+                /* ignore parse errors for comment lines etc */
               }
+            }
+          }
+        }
+        if (buffer.trim() && buffer.startsWith('data: ')) {
+          const data = buffer.slice(6).trim();
+          if (data !== '[DONE]') {
+            try {
+              const parsed = JSON.parse(data) as { delta?: string };
+              if (parsed.delta) full += parsed.delta;
+            } catch {
+              /* ignore */
             }
           }
         }
