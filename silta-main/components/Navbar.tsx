@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { content } from '../landingContent'
+import { content, DEMO_URL } from '../landingContent'
 import TransitionLink from './TransitionLink'
 import { usePageTransition } from './TransitionContext'
 
@@ -64,23 +64,37 @@ export default function Navbar() {
             </TransitionLink>
 
             <div className="hidden lg:flex items-center gap-1">
-              {content.nav.menu.map((m) => (
-                <TransitionLink
-                  key={m.path}
-                  to={m.path}
-                  className={`nav-link px-3 py-2 rounded-md text-[14px] font-medium transition-colors ${
-                    loc.pathname === m.path ? 'active text-accent' : 'text-[var(--color-text)]'
-                  }`}
-                >
-                  {m.label}
-                </TransitionLink>
-              ))}
-              <TransitionLink
-                to="/demo"
+              {content.nav.menu.map((m) =>
+                m.path.startsWith('http') ? (
+                  <a
+                    key={m.path}
+                    href={m.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="nav-link px-3 py-2 rounded-md text-[14px] font-medium transition-colors text-[var(--color-text)] hover:text-accent"
+                  >
+                    {m.label}
+                  </a>
+                ) : (
+                  <TransitionLink
+                    key={m.path}
+                    to={m.path}
+                    className={`nav-link px-3 py-2 rounded-md text-[14px] font-medium transition-colors ${
+                      loc.pathname === m.path ? 'active text-accent' : 'text-[var(--color-text)]'
+                    }`}
+                  >
+                    {m.label}
+                  </TransitionLink>
+                )
+              )}
+              <a
+                href={DEMO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="ml-3 px-5 py-2.5 rounded-[10px] font-semibold text-[14px] text-white no-underline bg-accent2 hover:opacity-90 transition-opacity"
               >
                 {content.nav.cta}
-              </TransitionLink>
+              </a>
             </div>
 
             <button
@@ -145,36 +159,54 @@ export default function Navbar() {
             Satellite · Navigation
           </p>
           <nav className="flex flex-col items-center gap-1 w-full max-w-xs pointer-events-auto">
-            {content.nav.menu.map((m, i) => (
-              <a
-                key={m.path}
-                href={m.path}
-                className="w-full flex items-center gap-3 py-4 px-5 rounded-2xl no-underline transition-colors text-left"
-                style={{
-                  background: loc.pathname === m.path ? 'rgba(47,111,78,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: loc.pathname === m.path ? '#a7f3d0' : 'rgba(255,255,255,0.9)',
-                  border: `1px solid ${loc.pathname === m.path ? 'rgba(47,111,78,0.4)' : 'rgba(255,255,255,0.08)'}`,
-                  animationDelay: `${i * 40}ms`,
-                }}
-                onClick={(e) => {
-                  e.preventDefault()
-                  setOpen(false)
-                  if (loc.pathname !== m.path) setTimeout(() => navigateTo(m.path), MENU_CLOSE_DURATION)
-                }}
-              >
-                <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] shrink-0" aria-hidden />
-                <span className="font-medium text-[15px]">{m.label}</span>
-              </a>
-            ))}
+            {content.nav.menu.map((m, i) =>
+              m.path.startsWith('http') ? (
+                <a
+                  key={m.path}
+                  href={m.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center gap-3 py-4 px-5 rounded-2xl no-underline transition-colors text-left"
+                  style={{
+                    background: 'rgba(255,255,255,0.06)',
+                    color: 'rgba(255,255,255,0.9)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    animationDelay: `${i * 40}ms`,
+                  }}
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] shrink-0" aria-hidden />
+                  <span className="font-medium text-[15px]">{m.label}</span>
+                </a>
+              ) : (
+                <a
+                  key={m.path}
+                  href={m.path}
+                  className="w-full flex items-center gap-3 py-4 px-5 rounded-2xl no-underline transition-colors text-left"
+                  style={{
+                    background: loc.pathname === m.path ? 'rgba(47,111,78,0.2)' : 'rgba(255,255,255,0.06)',
+                    color: loc.pathname === m.path ? '#a7f3d0' : 'rgba(255,255,255,0.9)',
+                    border: `1px solid ${loc.pathname === m.path ? 'rgba(47,111,78,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                    animationDelay: `${i * 40}ms`,
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setOpen(false)
+                    if (loc.pathname !== m.path) setTimeout(() => navigateTo(m.path), MENU_CLOSE_DURATION)
+                  }}
+                >
+                  <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] shrink-0" aria-hidden />
+                  <span className="font-medium text-[15px]">{m.label}</span>
+                </a>
+              )
+            )}
           </nav>
           <a
-            href="/demo"
+            href={DEMO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="mt-8 w-full max-w-xs py-4 rounded-2xl font-semibold text-[15px] text-center no-underline bg-[var(--color-accent2)] text-white hover:opacity-90 transition-opacity border border-white/10 pointer-events-auto block"
-            onClick={(e) => {
-              e.preventDefault()
-              setOpen(false)
-              setTimeout(() => navigateTo('/demo'), MENU_CLOSE_DURATION)
-            }}
+            onClick={() => setOpen(false)}
           >
             {content.nav.cta}
           </a>

@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react'
-import { content } from '../landingContent'
+import { content, DEMO_URL } from '../landingContent'
 import AnimateIn from '../components/AnimateIn'
 import Badge from '../components/Badge'
 import Button from '../components/Button'
@@ -67,10 +67,10 @@ export default function HeroPage() {
               </AnimateIn>
               <AnimateIn from="left" delay={240} duration={800}>
                 <div className="flex flex-wrap gap-3">
-                  <Button to="/demo" variant="primary">
+                  <Button href={DEMO_URL} variant="primary">
                     {h.cta1}
                   </Button>
-                  <Button to="/demo" variant="outline">
+                  <Button href={DEMO_URL} variant="outline">
                     {h.cta2}
                   </Button>
                 </div>

@@ -42,17 +42,23 @@ export async function handleChat(req: Request, res: Response): Promise<void> {
     '\n\n---\nFACTS (your only source of truth; never invent data not present here):\n' +
     JSON.stringify(FACTS, null, 0);
 
-  const history = messages.slice(-MAX_HISTORY_TURNS * 2).map((m) => ({
-    role: m.role === 'model' ? 'model' : 'user',
-    parts: [{ text: m.parts }],
-  }));
+  const history = messages
+    .slice(-MAX_HISTORY_TURNS * 2)
+    .filter((m) => (m.role === 'model' ? String(m.parts ?? '').trim() : true))
+    .map((m) => ({
+      role: m.role === 'model' ? 'model' : 'user',
+      parts: [{ text: String(m.parts ?? '').trim() }],
+    }));
 
   try {
     if (wantStream) {
       res.setHeader('Content-Type', 'text/event-stream');
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Connection', 'keep-alive');
+      res.setHeader('X-Accel-Buffering', 'no');
       res.flushHeaders?.();
+      res.write(': keep-alive\n\n');
+      (res as unknown as { flush?: () => void }).flush?.();
 
       const stream = await ai.models.generateContentStream({
         model: GEMINI_MODEL,

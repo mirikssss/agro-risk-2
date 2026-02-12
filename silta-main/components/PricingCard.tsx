@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom'
-import { content } from '../landingContent'
+import { content, DEMO_URL } from '../landingContent'
 
 type Tier = (typeof content.business.tiers)[number]
 
@@ -17,12 +16,14 @@ export default function PricingCard({ tier }: Props) {
       <p className="text-sm text-gray-400 mb-4">{tier.desc}</p>
       <p className="text-sm text-gray-400 mb-6">Best for: {tier.bestFor}</p>
       <p className="text-xs text-gray-500 mb-8">{tier.path}</p>
-      <Link
-        to="/demo"
-        className="mt-auto block text-center py-3 px-4 rounded-xl font-semibold text-sm transition-colors border border-white/10 text-white hover:bg-white/5"
+      <a
+        href={DEMO_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-auto block text-center py-3 px-4 rounded-xl font-semibold text-sm transition-colors border border-white/10 text-white hover:bg-white/5 no-underline"
       >
         Learn More
-      </Link>
+      </a>
     </div>
   )
 }

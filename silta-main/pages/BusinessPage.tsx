@@ -1,9 +1,9 @@
 import { useState } from 'react'
+import { DEMO_URL } from '../landingContent'
 import AnimateIn from '../components/AnimateIn'
 import { EditorialSection } from '../components/editorial'
 import Button from '../components/Button'
 import CheckListItem from '../components/CheckListItem'
-import TransitionLink from '../components/TransitionLink'
 
 type OfferingTab = 'banks' | 'insurers' | 'dfis'
 
@@ -343,15 +343,12 @@ export default function BusinessPage() {
               We'll scope a pilot in 30 minutes.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <Button href="https://agro-risk.vercel.app" variant="primary">
+              <Button href={DEMO_URL} variant="primary">
                 Попробовать пилот
               </Button>
-              <TransitionLink
-                to="/demo"
-                className="inline-flex items-center justify-center font-semibold rounded-[10px] px-5 py-3 text-[15px] border border-[var(--color-line)] text-[var(--color-text)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-              >
+              <Button href={DEMO_URL} variant="outline">
                 View Demo
-              </TransitionLink>
+              </Button>
             </div>
           </div>
         </AnimateIn>

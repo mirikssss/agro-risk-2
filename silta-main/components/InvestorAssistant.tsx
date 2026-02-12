@@ -100,7 +100,9 @@ export default function InvestorAssistant({
       setLoading(true);
       setStreamingText('');
 
-      const history = [...messages, userMsg].map((x) => ({ role: x.role, parts: x.parts }));
+      const history = [...messages, userMsg]
+        .filter((x) => (x.role === 'model' ? String(x.parts ?? '').trim() : true))
+        .map((x) => ({ role: x.role, parts: x.parts }));
 
       try {
         const res = await fetch(`${API_BASE}/api/ai/chat`, {
@@ -144,9 +146,16 @@ export default function InvestorAssistant({
             }
           }
         }
-        if (!voiceMode) setMessages((m) => [...m, { role: 'model', parts: full }]);
+        const finalText = full.trim();
+        if (!voiceMode) {
+          if (finalText) {
+            setMessages((m) => [...m, { role: 'model', parts: finalText }]);
+          } else {
+            setMessages((m) => [...m, { role: 'model', parts: 'The server did not return a response. Please try again or check that the API (Gemini) is configured on the server.' }]);
+          }
+        }
         setStreamingText('');
-        if (voiceMode && full.trim()) setPendingTts(full);
+        if (voiceMode && finalText) setPendingTts(finalText);
       } catch (e) {
         setMessages((m) => [
           ...m,

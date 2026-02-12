@@ -1,3 +1,5 @@
+export const DEMO_URL = 'https://agro-risk.vercel.app'
+
 export const content = {
   nav: {
     logo: 'AgroRisk',

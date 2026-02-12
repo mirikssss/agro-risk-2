@@ -1,4 +1,4 @@
-import { content } from '../landingContent'
+import { content, DEMO_URL } from '../landingContent'
 import AnimateIn from '../components/AnimateIn'
 import SectionHeading from '../components/SectionHeading'
 import Button from '../components/Button'
@@ -51,8 +51,8 @@ export default function DemoPage() {
 
         <AnimateIn from="fade" delay={450} duration={800}>
           <div className="flex flex-wrap gap-3 mt-8">
-            <Button to="/demo" variant="outline">{d.ctaDashboard}</Button>
-            <Button to="/demo" variant="primary">{d.ctaLive}</Button>
+            <Button href={DEMO_URL} variant="outline">{d.ctaDashboard}</Button>
+            <Button href={DEMO_URL} variant="primary">{d.ctaLive}</Button>
             <button
               type="button"
               onClick={openAssistant}
