@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     await handleChat(req, res);
 }
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-pro';
 const MAX_HISTORY_TURNS = 10;
 export async function handleChat(req, res) {
     if (!GEMINI_API_KEY) {

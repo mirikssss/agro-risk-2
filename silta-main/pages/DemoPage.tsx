@@ -15,11 +15,11 @@ export default function DemoPage() {
 
         {/* Interactive mock: one frame */}
         <AnimateIn from="bottom" delay={200} duration={800}>
-          <div className="relative rounded-xl border border-[var(--color-line)] overflow-hidden bg-[var(--color-surface)] shadow-[0_2px_20px_rgba(20,20,20,0.06)] satellite-grid">
+          <div className="relative rounded-xl border border-[var(--color-line)] overflow-hidden bg-[var(--color-surface)] shadow-[0_2px_20px_rgba(20,20,20,0.06)]">
             <div className="flex items-center gap-2 py-3 px-5 border-b border-[var(--color-line)] bg-[var(--color-surfaceAlt)]">
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-muted)]/60" />
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-muted)]/40" />
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-muted)]/30" />
+              <span className="w-3 h-3 rounded-full bg-[#ff5f57] shadow-[inset_0_1px_0_rgba(0,0,0,0.1)]" title="Close" />
+              <span className="w-3 h-3 rounded-full bg-[#febc2e] shadow-[inset_0_1px_0_rgba(0,0,0,0.1)]" title="Minimize" />
+              <span className="w-3 h-3 rounded-full bg-[#28c840] shadow-[inset_0_1px_0_rgba(0,0,0,0.1)]" title="Zoom" />
               <span className="text-[12px] text-[var(--color-muted)] ml-3">dashboard.agrorisk.io</span>
               <span className="ml-auto text-[10px] font-mono text-accent/80 tracking-wider">Live · NDVI</span>
             </div>
