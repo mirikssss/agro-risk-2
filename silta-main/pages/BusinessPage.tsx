@@ -143,7 +143,7 @@ export default function BusinessPage() {
             className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10"
             style={{ minHeight: 200 }}
           >
-            <div className="lg:col-span-7 space-y-6 transition-opacity duration-300">
+            <div key={tab} className="lg:col-span-7 space-y-6 animate-tab-content-in">
               <div>
                 <h3 className="text-[13px] font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-3">
                   What they get
