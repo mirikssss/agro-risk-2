@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "npm run dev --prefix silta-main",
     "build": "npm run build --prefix silta-main",
+    "build:server": "npm run build:server --prefix silta-main",
     "postinstall": "npm install --prefix silta-main"
   }
 }

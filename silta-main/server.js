@@ -1,10 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Load .env from silta-main (so GEMINI_API_KEY etc. work when running from any cwd)
+dotenv.config({ path: join(__dirname, '.env') });
 
 const app = express();
 const PORT = 3001;
@@ -291,6 +295,21 @@ function extractAnswer(question, content) {
   return bestSection || text.substring(0, 500) + '...';
 }
 
+// AgroRisk AI: chat (Gemini) and TTS (Deepgram) — load from same folder as server.js (works from any cwd)
+let handleChat, handleTts;
+try {
+  const chatPath = pathToFileURL(join(__dirname, 'dist-server', 'api', 'ai', 'chat.js')).href;
+  const ttsPath = pathToFileURL(join(__dirname, 'dist-server', 'api', 'ai', 'tts.js')).href;
+  const chatMod = await import(chatPath);
+  const ttsMod = await import(ttsPath);
+  handleChat = chatMod.handleChat;
+  handleTts = ttsMod.handleTts;
+  const ttsKind = process.env.DEEPGRAM_API_KEY ? 'Deepgram (key set)' : 'Deepgram (DEEPGRAM_API_KEY missing!)';
+  console.log('AgroRisk AI: /api/ai/chat and /api/ai/tts loaded. TTS:', ttsKind);
+} catch (e) {
+  console.warn('AgroRisk AI routes NOT loaded (run "npm run build:server" from silta-main):', e.message);
+}
+
 // Import the handler functions from the API routes
 const getChatbotResponse = async (question) => {
   try {
@@ -496,6 +515,26 @@ app.post('/api/chatbot', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// AgroRisk AI endpoints (optional; require build:server and env keys)
+if (handleChat) {
+  app.post('/api/ai/chat', (req, res) => {
+    console.log('[AgroRisk AI] POST /api/ai/chat');
+    handleChat(req, res).catch((err) => {
+      console.error('[AgroRisk AI] chat error:', err);
+      if (!res.headersSent) res.status(500).json({ error: 'Chat failed.' });
+    });
+  });
+}
+if (handleTts) {
+  app.post('/api/ai/tts', (req, res) => {
+    console.log('[AgroRisk AI] POST /api/ai/tts');
+    handleTts(req, res).catch((err) => {
+      console.error('[AgroRisk AI] TTS error:', err);
+      if (!res.headersSent) res.status(500).json({ error: 'TTS failed.' });
+    });
+  });
+}
 
 // API Ask endpoint
 app.post('/api/ask', async (req, res) => {
