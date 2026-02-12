@@ -69,11 +69,31 @@ export async function handleChat(req: Request, res: Response): Promise<void> {
         },
       });
 
+      let wroteAny = false;
       for await (const chunk of stream) {
-        const text = chunk.text;
-        if (text) {
+        const text = chunk?.text ?? (chunk as { text?: string }).text;
+        if (typeof text === 'string' && text.length > 0) {
           res.write(`data: ${JSON.stringify({ delta: text })}\n\n`);
           (res as unknown as { flush?: () => void }).flush?.();
+          wroteAny = true;
+        }
+      }
+
+      if (!wroteAny) {
+        const fallback = await ai.models.generateContent({
+          model: GEMINI_MODEL,
+          contents: history,
+          config: {
+            systemInstruction: systemBlock,
+            temperature: 0.4,
+          },
+        });
+        const fullText = fallback?.text ?? (fallback as { text?: string })?.text ?? '';
+        if (fullText.trim()) {
+          res.write(`data: ${JSON.stringify({ delta: fullText })}\n\n`);
+          (res as unknown as { flush?: () => void }).flush?.();
+        } else {
+          res.write(`data: ${JSON.stringify({ delta: 'I couldn\'t generate a response for this request. Please try again or rephrase your question.' })}\n\n`);
         }
       }
       res.write('data: [DONE]\n\n');
