@@ -171,9 +171,44 @@ export const content = {
   roadmap: {
     title: 'Roadmap',
     phases: [
-      { phase: 'Phase 1', title: 'Foundation', period: 'Q1-Q2 2026', items: ['MVP development', 'Pilot with 1-2 banks in Uzbekistan', 'Historical data validation', 'Dashboard v1'] },
-      { phase: 'Phase 2', title: 'Scale', period: 'Q3-Q4 2026', items: ['API integration', 'Insurance module', 'Multi-region coverage', '10+ institutional clients'] },
-      { phase: 'Phase 3', title: 'Expansion', period: '2027+', items: ['Central Asia coverage', 'Credit scoring integration', 'Real-time monitoring', 'Series A readiness'] },
+      {
+        phase: 'Phase 1',
+        title: 'Foundation',
+        period: 'Completed / Now',
+        milestone: 'MVP + Data Backbone Ready',
+        items: [
+          { text: 'MVP dashboard & risk cockpit built', status: 'done' as const },
+          { text: '8 years of satellite-derived signals assembled (Sentinel-based)', status: 'done' as const },
+          { text: 'Initial conversations with Agrobank stakeholders (problem validation + workflow fit)', status: 'done' as const },
+          { text: 'Baseline risk outputs (p10/p50/p90 scenarios) + explainable drivers (v1)', status: 'done' as const },
+        ],
+      },
+      {
+        phase: 'Phase 2',
+        title: 'Pilot + Product Hardening',
+        period: 'Next 3–6 months',
+        milestone: 'Bank Pilot + MoA Integration',
+        items: [
+          { text: 'Pilot with 1 bank (portfolio subset) + KPI validation', status: 'planned' as const },
+          { text: 'Integration track with Ministry of Agriculture (Uzbekistan) / data access alignment', status: 'planned' as const },
+          { text: 'LLM launch: fine-tune / adapt an assistant on agro + banking domain for better recommendations & explanations', status: 'planned' as const },
+          { text: 'Improve field boundary pipeline (GeoJSON acquisition + segmentation + QC)', status: 'planned' as const },
+          { text: 'Governance: audit logs, confidence flags, monitoring alerts, API v1', status: 'planned' as const },
+        ],
+      },
+      {
+        phase: 'Phase 3',
+        title: 'Scale in Central Asia',
+        period: '2027+',
+        milestone: 'Multi-Country Scale',
+        items: [
+          { text: 'Enter 2–3 Central Asia markets with local partners', status: 'planned' as const },
+          { text: "Work with each country's Ministry of Agriculture / agencies for boundary + reporting alignment", status: 'planned' as const },
+          { text: 'Insurance module: claim verification + parametric triggers', status: 'planned' as const },
+          { text: 'Portfolio analytics: regional concentration risk, early-warning heatmaps, capital allocation support', status: 'planned' as const },
+          { text: 'Enterprise readiness: SLA, security review, multi-tenant deployments', status: 'planned' as const },
+        ],
+      },
     ],
   },
 
