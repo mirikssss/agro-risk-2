@@ -36,6 +36,12 @@ export default function HowPage() {
                           {s.title}
                         </h3>
                         <p className="text-[17px] text-[var(--color-muted)] leading-[1.65]">{s.desc}</p>
+                        {'tagline' in s && s.tagline && (
+                          <p className="mt-4 text-[15px] font-semibold text-[var(--color-text)]">{s.tagline}</p>
+                        )}
+                        {'footer' in s && s.footer && (
+                          <p className="mt-4 pt-3 border-t border-[var(--color-line)] text-[12px] text-[var(--color-muted)]">{s.footer}</p>
+                        )}
                       </div>
                     </AnimateIn>
                   )}
@@ -58,6 +64,12 @@ export default function HowPage() {
                           {s.title}
                         </h3>
                         <p className="text-[17px] text-[var(--color-muted)] leading-[1.65]">{s.desc}</p>
+                        {'tagline' in s && s.tagline && (
+                          <p className="mt-4 text-[15px] font-semibold text-[var(--color-text)]">{s.tagline}</p>
+                        )}
+                        {'footer' in s && s.footer && (
+                          <p className="mt-4 pt-3 border-t border-[var(--color-line)] text-[12px] text-[var(--color-muted)]">{s.footer}</p>
+                        )}
                       </div>
                     </AnimateIn>
                   )}

@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import PageTransition from './components/PageTransition'
+import SatelliteOrb from './components/SatelliteOrb'
 import { TransitionProvider } from './components/TransitionContext'
 
 export default function Layout() {
@@ -15,6 +16,7 @@ export default function Layout() {
           </PageTransition>
         </main>
         <Footer />
+        <SatelliteOrb />
       </div>
     </TransitionProvider>
   )
