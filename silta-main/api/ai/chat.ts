@@ -88,8 +88,17 @@ export async function handleChat(req: Request, res: Response): Promise<void> {
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
+    const is429 = message.includes('429') || message.includes('RESOURCE_EXHAUSTED') || message.includes('quota');
     if (!res.headersSent) {
-      res.status(500).json({ error: 'Chat failed.', details: message });
+      if (is429) {
+        res.status(429).json({
+          error: 'Quota exceeded.',
+          code: 'QUOTA_EXCEEDED',
+          details: 'Gemini API rate limit reached. Quota is per Google project, not per API key. Use gemini-2.5-flash (not Pro), or try again later. See https://ai.dev/rate-limit',
+        });
+      } else {
+        res.status(500).json({ error: 'Chat failed.', details: message });
+      }
     } else {
       res.end();
     }

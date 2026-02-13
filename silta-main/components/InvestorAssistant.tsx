@@ -112,9 +112,14 @@ export default function InvestorAssistant({
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({ error: res.statusText }));
-          const msg = res.status === 404
-            ? 'API not found. Start the dev server (npm run dev from project root) and run "npm run build:server" in silta-main. Check the terminal where the API runs (port 3001).'
-            : `Error ${res.status}: ${err.error || res.statusText}`;
+          let msg: string;
+          if (res.status === 429 || err.code === 'QUOTA_EXCEEDED') {
+            msg = 'Лимит запросов Gemini исчерпан. Квота общая на проект в Google, смена API-ключа в том же проекте не помогает. Проверьте: в Vercel переменная GEMINI_MODEL не задана или равна gemini-2.5-flash (не Pro). Подождите несколько минут или проверьте использование: https://ai.dev/rate-limit';
+          } else if (res.status === 404) {
+            msg = 'API not found. Start the dev server (npm run dev from project root) and run "npm run build:server" in silta-main. Check the terminal where the API runs (port 3001).';
+          } else {
+            msg = `Error ${res.status}: ${err.error || res.statusText}`;
+          }
           setMessages((m) => [...m, { role: 'model', parts: msg }]);
           return;
         }
